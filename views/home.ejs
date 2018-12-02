@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>renthub.in</title>
+    <link rel="stylesheet" type="text/css" href="/css/style.css">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:300' rel='stylesheet' type='text/css'>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script>
+        $(document).ready(function(){
+        $("#toggle").click(function(){
+        $("#target").toggle();
+    });
+});
+</script>
+  </head>
+  <body>
+    <header>
+    <h1 class="title">Rent<span>hub</span>.in</h1>
+  </header>
+    <main>
+    <div class="container">
+      <fieldset>
+        <form action="/" method="post">
+          <input name="city" type="text" class="ghost-input" placeholder="Search" required>
+          <input type="submit" class="ghost-button" value="Search">
+        </form>
+      </fieldset>
+    </div>
+    <div>
+      <button id="toggle">Post an Ad ?</button>
+    </div>
+      <div id="target">
+      <fieldset>
+        <form action="http://127.0.0.1:3000" method="post">
+          <input type="text" name="title" class="post-ghost-input" placeholder="Title" required>
+          <input type="text" name="description" class="post-ghost-input" placeholder="A little bit of description" required>
+          <input type="text" name="pincode" class="post-ghost-input" placeholder="Pincode" required>
+          <input type="text" name="address" class="post-ghost-input" placeholder="Address" required>
+          <input type="submit" class="post-button" value="Post the Ad">
+        </form>
+      </fieldset>
+    </div>
+    <article>
+      <% for(var i=0; i<postList.length; i++) { %>
+      <section>
+        <h1><%= postList[i].title %></h1></br>
+        <p><%= postList[i].description %></p></br>
+        <h4><%= postList[i].pincode %></h4></br>
+        <h4><%= postList[i].address %></h4></br>
+      </section>
+      <% } %>
+    </article>
+  </main>
+  </body>
+</html>
