@@ -43,13 +43,11 @@ app.get('/',function(req,res){
 })
 
 // API to get all the searched posts
-app.get('/search',(req,res)=>{
-	console.log("inside search app.get")
+app.post('/search',(req,res)=>{
 	const errors = validationResult(req)
 	if (!errors.isEmpty()) {
           return res.status(422).json({ errors: errors.array() })
-        }  
-    //if(!req.body.search) return res.sendStatus(400)-TODO
+        }
   	Post.find({}, null,{ sort: {date: -1 },limit: 25},(error,posts)=>{
    	 if (error) {
    	 	console.log('error: '+error)
