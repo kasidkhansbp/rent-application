@@ -21,8 +21,8 @@
     <main>
     <div class="container">
       <fieldset>
-        <form action="/" method="post">
-          <input name="city" type="text" class="ghost-input" placeholder="Search" required>
+        <form action="/search" method="get">
+          <input name="search" type="text" class="ghost-input" placeholder="Search" required>
           <input type="submit" class="ghost-button" value="Search">
         </form>
       </fieldset>
@@ -44,10 +44,10 @@
     <article>
       <% for(var i=0; i<postList.length; i++) { %>
       <section>
-        <h1><%= postList[i].title %></h1></br>
-        <p><%= postList[i].description %></p></br>
-        <h4><%= postList[i].pincode %></h4></br>
-        <h4><%= postList[i].address %></h4></br>
+        <h1><%= postList[i].title %></h1>
+        <p><%= postList[i].description %></p>
+        <h4><%= postList[i].pincode %></h4>
+        <h4><%= postList[i].address %></h4>
       </section>
       <% } %>
     </article>

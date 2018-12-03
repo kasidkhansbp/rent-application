@@ -17,7 +17,8 @@ const postsSchema = new Schema (
 		title: String,
         description: String,
         address: String,
-        pincode: String 
+        pincode: String,
+        date: { type: Date, default: Date.now() }
 	})
 
 // create a model which uses the Schema
@@ -32,7 +33,7 @@ app.use(bodyParser.urlencoded({extended: false}))
 
 // Render the html home page
 app.get('/',function(req,res){
-	Post.find({}, null, {limit: 10},(error,posts)=>{
+	Post.find({}, null,{ sort: {date: -1 },limit: 25},(error,posts)=>{
    	 if (error) {
    	 	console.log('error: '+error)
    	 	process.exit(1)
@@ -41,16 +42,21 @@ app.get('/',function(req,res){
 })
 })
 
-// API to get all the posts
-app.get('/posts',(req,res)=>{
-  Post.find({}, null, {limit: 10},(error,posts)=>{
+// API to get all the searched posts
+app.get('/search',(req,res)=>{
+	console.log("inside search app.get")
+	const errors = validationResult(req)
+	if (!errors.isEmpty()) {
+          return res.status(422).json({ errors: errors.array() })
+        }  
+    //if(!req.body.search) return res.sendStatus(400)-TODO
+  	Post.find({}, null,{ sort: {date: -1 },limit: 25},(error,posts)=>{
    	 if (error) {
    	 	console.log('error: '+error)
    	 	process.exit(1)
    	   }
-   	   res.send(posts)
-   	   //res.sendFile('index.html');
-   	})
+  	res.render('search',{"postList":posts})
+})
    })
 
 //API to create a new post
@@ -60,15 +66,14 @@ app.post('/',(req,res)=>{
   if (!errors.isEmpty()) {
           return res.status(422).json({ errors: errors.array() })
         }   
-  console.log(req.body)
-  console.log(req.headers['content-type'])
   if(!req.body.title || !req.body.description || !req.body.address || !req.body.pincode ) return res.sendStatus(400)
     // create a new post
     let post = new Post ({
     	title: req.body.title,
     	description: req.body.description,
     	address:req.body.address,
-    	pincode: req.body.pincode
+    	pincode: req.body.pincode,
+    	date:Date.now()
     })
     //saves the post
     post.save((error)=>{
@@ -98,8 +103,8 @@ app.put('/posts/:id',(req,res)=>{
 
 
 //API to delete the post
-app.delete('/post/:id',(req,res)=>{
- 
+app.delete('/posts',(req,res)=>{
+ //Post.collection.deleteMany({})
 }) 
 
 

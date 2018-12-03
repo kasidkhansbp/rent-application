@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>renthub.in</title>
+    <link rel="stylesheet" type="text/css" href="/css/style.css">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:300' rel='stylesheet' type='text/css'>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  </head>
+  <body>
+    <header>
+    <h1 class="title">Rent<span>hub</span>.in</h1>
+  </header>
+    <main>
+    <article>
+      <% for(var i=0; i<postList.length; i++) { %>
+      <section>
+        <h1><%= postList[i].title %></h1>
+        <p><%= postList[i].description %></p>
+        <h4><%= postList[i].pincode %></h4>
+        <h4><%= postList[i].address %></h4>
+      </section>
+      <% } %>
+    </article>
+  </main>
+  </body>
+</html>
