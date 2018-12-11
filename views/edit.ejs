@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>renthub.in</title>
+    <link rel="stylesheet" type="text/css" href="/css/style.css">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:300' rel='stylesheet' type='text/css'>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="/js/main.js"></script>
+  </head>
+  <body>
+    <header>
+    <h1 class="title">Rent<span>hub</span>.in</h1>
+  </header>
+    <main>
+    <article>
+      <section>
+        <form action="/post/edit/<%= postList._id %>" method="post">
+        <input contenteditable="true" type="text" name="title" value="<%= postList.title %>"> <br>
+        <input contenteditable="true" type="text" name="description"value="<%= postList.description %>"><br>
+        <input contenteditable="true" type="text" name="pincode" value="<%= postList.pincode %>"><br>
+        <input contenteditable="true" type="text" name="address" value="<%= postList.address %>">
+        <input type="submit" class="edit-button" value="submit">
+      </form>
+      </section>
+    </article>
+  </main>
+  </body>
+</html>

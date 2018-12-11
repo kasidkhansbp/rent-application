@@ -6,17 +6,29 @@
     <link rel="stylesheet" type="text/css" href="/css/style.css">
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:300' rel='stylesheet' type='text/css'>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script>
-        $(document).ready(function(){
-        $("#toggle").click(function(){
-        $("#target").toggle();
+    <script type="text/javascript">
+      $(document).ready(function(){
+          $("#target").hide();
+          $("#toggle").click(function(e){
+          $("#target").toggle();
     });
 });
-</script>
+    </script>
+    <script src="/js/main.js"></script>
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+    <meta name="google-signin-client_id" content="452772637773-61ablseaj861narh01j83f875ifdv7qo.apps.googleusercontent.com">
+    <script src="/js/google.js"></script>
   </head>
   <body>
     <header>
     <h1 class="title">Rent<span>hub</span>.in</h1>
+    <div class="g-signin2" data-onsuccess="onSignIn"></div>
+    <div class="g-loginData">
+      <img id="g-loginPic" class="image-cirlce">
+      <h4 id="g-accountDisplayName"></h4>
+      <h4 id="g-emailAddress"></h4>
+      <a href="#" onClick="signOut()">Sign Out</a>
+    </div>
   </header>
     <main>
     <div class="container">
@@ -44,10 +56,15 @@
     <article>
       <% for(var i=0; i<postList.length; i++) { %>
       <section>
-        <h1><%= postList[i].title %></h1>
-        <p><%= postList[i].description %></p>
-        <h4><%= postList[i].pincode %></h4>
-        <h4><%= postList[i].address %></h4>
+        <div class="container" id="<%= postList[i]._id %>">
+          <h1><%= postList[i].title %></h1>
+          <a href="" data-id="<%= postList[i]._id %>" class="delete">delete</a>
+          <a href="" data-id="<%= postList[i]._id %>" class="edit">edit</a>
+          <p><%= postList[i].description %></p>
+          <h4><%= postList[i].pincode %></h4>
+          <h4><%= postList[i].address %></h4>
+          <button class="reply-button">Reply</button>
+        </div>
       </section>
       <% } %>
     </article>

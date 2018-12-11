@@ -42,7 +42,7 @@ app.get('/',function(req,res){
 })
 })
 
-// API to get all the searched posts
+// route to get all the searched posts
 app.post('/search',(req,res)=>{
 	const errors = validationResult(req)
 	if (!errors.isEmpty()) {
@@ -57,7 +57,7 @@ app.post('/search',(req,res)=>{
 })
    })
 
-//API to create a new post
+//route to create a new post
 app.post('/',(req,res)=>{
   //validate the request
   const errors = validationResult(req)
@@ -76,34 +76,95 @@ app.post('/',(req,res)=>{
     //saves the post
     post.save((error)=>{
     	if (error) throw error
-      res.status(201).send('Post created!')
+     Post.find({}, null,{ sort: {date: -1 },limit: 25},(error,posts)=>{
+   	 if (error) {
+   	 	console.log('error: '+error)
+   	 	process.exit(1)
+   	   }
+  	res.render('home',{"postList":posts})
     })
 }) 
+})
 
-// API to update the post
-app.put('/posts/:id',(req,res)=>{
+// route to update the post
+app.post('/post/edit/:id',(req,res)=>{
+	console.log('entered put')
   const errors = validationResult(req)
   if (!errors.isEmpty()) {
           return res.status(422).json({ errors: errors.array() })
         } 
   //find the post by ID
-  //TODO
-   
+  Post.findById(req.params.id,(error,post)=> {
+    if(error) {
+      console.log('error: '+error)
+      process.exit(1)
+    }
    // check if the post exist.
-  // TODO
+    if (post==null) return res.status(404).send("post not found")
     // update the change
-    //TODO
-
+		console.log('changed put')
+    	post.title=req.body.title,
+    	post.description=req.body.description,
+    	post.address=req.body.address,
+    	post.pincode=req.body.pincode,
+    	post.date=Date.now()
     //save the function
-    // TODO
-    res.status(200).send('Updated successfully')
+    post.save((error)=> {
+    	console.log('entered put save block')
+      if(error) {
+      console.log('error: '+error)
+      process.exit(1)
+    }
+    Post.find({}, null,{ sort: {date: -1 },limit: 25},(error,posts)=>{
+   	 if (error) {
+   	 	console.log('error: '+error)
+   	 	process.exit(1)
+   	   }
+  	res.render('home',{"postList":posts})
     })
+})
+})
+ })
 
-
-//API to delete the post
-app.delete('/posts',(req,res)=>{
+//route to delete the post
+app.delete('/post/:id',(req,res)=>{
  //Post.collection.deleteMany({})
+console.log('entered delete');
+ Post.findById(req.params.id,(error,post)=> {
+    if(error) {
+      console.log('error: '+error)
+      process.exit(1)
+    }
+// check if the post exist.
+  if (post==null) return res.status(404).send("post not found")
+  // Delete the post
+  post.remove((error)=> {
+    if (error) {
+      console.log('error: '+error)
+      process.exit(1)
+    }
+    res.status(204).send() 
 }) 
+  })
+})
+
+// edit post form
+app.get('/post/edit/:id',function(req,res){
+	console.log('entered edit')
+	Post.findById(req.params.id,(error,post)=>{
+   	 if (error) {
+   	 	console.log('error: '+error)
+   	 	process.exit(1)
+   	   }
+   	// check if the post exist.
+  	if (post==null) {
+  		return res.status(404).send("post not found")
+  	}else{
+  		console.log('entered else part')
+  		res.render('edit',{"postList":post})
+  }
+})
+})
 
 
 //listening to port 3000

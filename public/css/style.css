@@ -81,7 +81,8 @@ h1 span {
    color: #E64A19;
 }
 
-.title {
+.title,
+.g-signin2 {
   display:inline-block;
 }
 
@@ -157,4 +158,22 @@ form input[type="submit"] {
   background-color: #E64A19;
   opacity:1.0;
   
+}
+
+.container h1 {
+    display:inline-block;
+}
+
+.container a {
+  float:right;
+  padding: 25px;
+}
+
+.g-signin2 {
+  float:right;
+  padding: 25px;
+}
+
+.g-loginData {
+  display:none;
 }
