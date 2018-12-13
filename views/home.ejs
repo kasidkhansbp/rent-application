@@ -5,6 +5,9 @@
     <title>renthub.in</title>
     <link rel="stylesheet" type="text/css" href="/css/style.css">
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:300' rel='stylesheet' type='text/css'>
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+    <meta name="google-signin-client_id" content="452772637773-61ablseaj861narh01j83f875ifdv7qo.apps.googleusercontent.com">
+    <script src="/js/google.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script type="text/javascript">
       $(document).ready(function(){
@@ -14,23 +17,26 @@
     });
 });
     </script>
+    <script>
+      function openDialog() {
+        Avgrund.show( "#default-popup" );
+      }
+    </script>
     <script src="/js/main.js"></script>
-    <script src="https://apis.google.com/js/platform.js" async defer></script>
-    <meta name="google-signin-client_id" content="452772637773-61ablseaj861narh01j83f875ifdv7qo.apps.googleusercontent.com">
-    <script src="/js/google.js"></script>
   </head>
   <body>
     <header>
-    <h1 class="title">Rent<span>hub</span>.in</h1>
+    <h1 class="title">Rental-<span>MarketPlace</span>.in</h1>
     <div class="g-signin2" data-onsuccess="onSignIn"></div>
     <div class="g-loginData">
-      <img id="g-loginPic" class="image-cirlce">
+      <img id="g-loginPic" class="image-cirlce"> 
       <h4 id="g-accountDisplayName"></h4>
       <h4 id="g-emailAddress"></h4>
-      <a href="#" onClick="signOut()">Sign Out</a>
+      <a href="#" onClick="signOut()">SignOut</a>
     </div>
   </header>
     <main>
+    <div class="main-container">
     <div class="container">
       <fieldset>
         <form action="/search" method="post">
@@ -44,7 +50,7 @@
     </div>
       <div id="target">
       <fieldset>
-        <form action="http://127.0.0.1:3000" method="post">
+        <form id="post-form" action="/" method="post">
           <input type="text" name="title" class="post-ghost-input" placeholder="Title" required>
           <input type="text" name="description" class="post-ghost-input" placeholder="A little bit of description" required>
           <input type="text" name="pincode" class="post-ghost-input" placeholder="Pincode" required>
@@ -52,22 +58,30 @@
           <input type="submit" class="post-button" value="Post the Ad">
         </form>
       </fieldset>
-    </div>
+      </div>
     <article>
       <% for(var i=0; i<postList.length; i++) { %>
       <section>
-        <div class="container" id="<%= postList[i]._id %>">
+        <div class="container">
           <h1><%= postList[i].title %></h1>
           <a href="" data-id="<%= postList[i]._id %>" class="delete">delete</a>
           <a href="" data-id="<%= postList[i]._id %>" class="edit">edit</a>
           <p><%= postList[i].description %></p>
           <h4><%= postList[i].pincode %></h4>
           <h4><%= postList[i].address %></h4>
-          <button class="reply-button">Reply</button>
+          <!--reply-button is hidden by default till user login-->
+          <button class="reply-button">Reply</button><br>
+          <!--reply class is hidden by default-->
+          <div class="reply-block">
+            <textarea rows="4" cols="50"></textarea><br>
+            <button class="reply-submit" data-id="<%= postList[i]._id %>">send</button>
+            <button class="reply-cancel">cancel</button>
+          </div>
         </div>
       </section>
       <% } %>
     </article>
+  </div>
   </main>
   </body>
 </html>

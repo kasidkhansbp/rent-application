@@ -35,4 +35,27 @@ $(document).ready(function(){
 			}
 		})
 	})
+	$(".reply-button").click(function(e) {
+    // make corresponding reply-block visible
+    $(this).closest(".container").find(".reply-block").show();
+    // other code here to act on the click
+ });
+	$(".reply-cancel").click(function(e) {
+    // make corresponding reply-block visible
+    $(this).closest(".container").find(".reply-block").hide();
+    // other code here to act on the click
+ });
+	$("#post-form").submit(function() {
+		if(sessionStorage.getItem('myUserEntity') == null){
+			console.log('entered session Storage if part')
+    		alert("login to post an ad");
+    		$(".g-signin2").focus();
+    		return false;
+    		
+  	} else {
+  			console.log('entered session Storage else part')
+    		//User already logged in
+        	return true;
+  }
+	});
 });

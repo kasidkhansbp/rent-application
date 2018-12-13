@@ -133,10 +133,6 @@ h1 span {
   opacity:1.0;
 }
 
-.span-ramanujan {
-  color:#0080ff;
-}
-
 form input[type="submit"] {
     margin: 0 auto;
     display: block;
@@ -174,6 +170,27 @@ form input[type="submit"] {
   padding: 25px;
 }
 
-.g-loginData {
+.g-loginData,
+.reply-button {
   display:none;
+}
+
+.reply-block {
+  display:none;
+}
+
+.signIn-modal {
+  display: none;
+  postion:fixed;
+  height:100%;
+  width:100%;
+  overflow:auto;
+  background: rgba(0,0,0,0.4);
+  text-align: center;
+}
+
+.modal-content {
+  background: #f4f4f4;
+  margin:20%;
+  width: 60%;
 }
