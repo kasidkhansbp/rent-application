@@ -3,10 +3,13 @@ const errorHandler =require('errorhandler')
 const bodyParser = require('body-parser')
 const express = require('express')
 const { validationResult } = require('express-validator/check')
-
+const {OAuth2Client} = require('google-auth-library')
+const client = new OAuth2Client('452772637773-61ablseaj861narh01j83f875ifdv7qo.apps.googleusercontent.com')
+var email="";
 var mongoose = require('mongoose')
 mongoose.Promise = global.Promise
 mongoose.connect('mongodb://localhost:27017/renthub-db')
+
 
 // declare a Schema
 var Schema = mongoose.Schema
@@ -18,7 +21,8 @@ const postsSchema = new Schema (
         description: String,
         address: String,
         pincode: String,
-        date: { type: Date, default: Date.now() }
+        date: { type: Date, default: Date.now()},
+        email:String
 	})
 
 // create a model which uses the Schema
@@ -31,6 +35,16 @@ app.set('view engine', 'ejs')
 app.use(express.static('public'))
 app.use(bodyParser.urlencoded({extended: false}))
 
+//Test Router
+app.get('/test',function(req,res){
+	Post.find({}, null,{ sort: {date: -1 },limit: 25},(error,posts)=>{
+   	 if (error) {
+   	 	console.log('error: '+error)
+   	 	process.exit(1)
+   	   }
+  	res.send(posts)
+})
+})
 // Render the html home page
 app.get('/',function(req,res){
 	Post.find({}, null,{ sort: {date: -1 },limit: 25},(error,posts)=>{
@@ -59,19 +73,22 @@ app.post('/search',(req,res)=>{
 
 //route to create a new post
 app.post('/',(req,res)=>{
+	console.log('Entered post new request route')
   //validate the request
   const errors = validationResult(req)
   if (!errors.isEmpty()) {
           return res.status(422).json({ errors: errors.array() })
         }   
-  if(!req.body.title || !req.body.description || !req.body.address || !req.body.pincode ) return res.sendStatus(400)
+  if(!req.body.title || !req.body.description || !req.body.address || !req.body.pincode) return res.sendStatus(400)
+  	
     // create a new post
     let post = new Post ({
     	title: req.body.title,
     	description: req.body.description,
     	address:req.body.address,
     	pincode: req.body.pincode,
-    	date:Date.now()
+    	date:Date.now(),
+    	email:email
     })
     //saves the post
     post.save((error)=>{
@@ -107,7 +124,8 @@ app.post('/post/edit/:id',(req,res)=>{
     	post.description=req.body.description,
     	post.address=req.body.address,
     	post.pincode=req.body.pincode,
-    	post.date=Date.now()
+    	post.date=Date.now(),
+    	post.email=email
     //save the function
     post.save((error)=> {
     	console.log('entered put save block')
@@ -166,6 +184,30 @@ app.get('/post/edit/:id',function(req,res){
 })
 })
 
+app.post('/tokensignin',(req,res)=>{
+	//
+	console.log("entered tokensignin")
+  	
+  	token=req.body.idtoken;
+  	console.log('print token variable'+token)
+  	console.log('Before verify token loop')
+  	async function verify() {
+  	console.log('entered verify token loop')
+  	const ticket = await client.verifyIdToken({
+      idToken: token,
+      audience: '452772637773-61ablseaj861narh01j83f875ifdv7qo.apps.googleusercontent.com',  // Specify the CLIENT_ID of the app that accesses the backend
+      // Or, if multiple clients access the backend:
+      //[CLIENT_ID_1, CLIENT_ID_2, CLIENT_ID_3]
+ 	 });
+  	const payload = ticket.getPayload();
+  	userid = payload['sub'];
+  	email = payload['email'];
+  	console.log(userid);
+  	console.log(email);
+}
+verify().catch(console.error);
+
+   })
 
 //listening to port 3000
 app.listen(3000,function() {

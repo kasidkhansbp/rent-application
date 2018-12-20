@@ -11,9 +11,12 @@ function onSignIn(googleUser) {
     var myUserEntity = {};
     myUserEntity.Id = profile.getId();
     myUserEntity.Name = profile.getName();
-  
-  //Store the entity object in sessionStorage where it will be accessible from all pages of your site.
-  sessionStorage.setItem('myUserEntity',JSON.stringify(myUserEntity));
+  //Store the entity object in localStorage where it will be accessible from all pages of your site.
+  localStorage.setItem('myUserEntity',JSON.stringify(myUserEntity));
+
+  // The ID token you need to pass to your backend:
+    id_token = googleUser.getAuthResponse().id_token;
+    console.log("ID Token: " + id_token);
 
 };
 

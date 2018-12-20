@@ -46,16 +46,21 @@ $(document).ready(function(){
     // other code here to act on the click
  });
 	$("#post-form").submit(function() {
-		if(sessionStorage.getItem('myUserEntity') == null){
-			console.log('entered session Storage if part')
-    		alert("login to post an ad");
-    		$(".g-signin2").focus();
+		if(localStorage.getItem('myUserEntity')==null){
+    		alert("login to post an Ad");
     		return false;
-    		
   	} else {
-  			console.log('entered session Storage else part')
-    		//User already logged in
-        	return true;
+  		var xhr = new XMLHttpRequest();
+		xhr.open('POST', 'http://localhost:3000/tokensignin',true);
+		xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+		xhr.onload = function() {
+  		console.log('Signed in as: ' + xhr.responseText);
+		};	
+		console.log('printing id token');
+		console.log(id_token);
+		xhr.send('idtoken=' + id_token);
+  		console.log('entered session Storage else part');
+        return true;
   }
 	});
 });
